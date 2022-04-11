@@ -6,6 +6,7 @@ use App\Services\CatFactsService;
 
 class CatController extends Controller
 {
+    /*
     public function index($limit = 1)
     {
 
@@ -23,7 +24,7 @@ class CatController extends Controller
             'randomCats' => $randomCats
         ]);
     }
-
+*/
 
     public function json($limit)
     {
@@ -33,7 +34,9 @@ class CatController extends Controller
         }
 
         $catFactData = new CatFactsService();
-        $randomCats = $catFactData->getRandomCatFact($limit);
+        $randomCats = $catFactData->getCatFacts($limit);
+
+        // this should return a json object from the built model / resource.
 
         return $randomCats;
     }

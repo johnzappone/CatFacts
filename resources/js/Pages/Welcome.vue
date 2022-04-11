@@ -1,24 +1,26 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 
+/*
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
 });
+*/
 
 const form = useForm({
     catfacts: 1,
 });
 
-let outputFacts = false;
-let outputData = [];
+// placeholders for data
+let hasFacts = false;
+let factList = [];
 
-const fetchAPIData = () => {
+const submit = () => {
     let tempValue = form.catfacts;
 
-    // endpoint should direct to this laravel http://catfacts.test/api/cats/
     fetch("/api/cats/" + tempValue, {
         method: "GET",
     })
@@ -26,20 +28,14 @@ const fetchAPIData = () => {
             if (response.ok) {
                 return response.json();
             } else {
-                alert(
-                    "Server returned " +
-                        response.status +
-                        " : " +
-                        response.statusText
-                );
+                // error handling //console.log(response);
             }
         })
         .then((response) => {
-            //console.log(response.data);
-            outputData = response.data;
-            outputFacts = true;
+            factList = response.data;
+            hasFacts = true;
 
-            // trick to update the response to vdom. need a better solution.
+            // trick to update vdom. need a better solution.
             form.reset();
             form.catfacts = tempValue;
         })
@@ -68,8 +64,7 @@ const fetchAPIData = () => {
                                 src="/img/cat.svg"
                                 class="h-16 w-auto sm:h-20"
                             />
-
-                            <p>
+                            <p class="p-6">
                                 A little birdie told me you wanted to know some
                                 facts about Cats.
                             </p>
@@ -84,7 +79,7 @@ const fetchAPIData = () => {
                         <div
                             class="text-center mt-2 text-gray-600 dark:text-gray-400 text-sm"
                         >
-                            <form @submit.prevent="fetchAPIData">
+                            <form @submit.prevent="submit">
                                 <div>
                                     <input
                                         type="number"
@@ -119,13 +114,16 @@ const fetchAPIData = () => {
                         <div
                             class="mt-2 text-gray-600 dark:text-gray-400 text-sm"
                         >
-                            <div v-if="outputFacts">
-                                <template v-for="block in outputData">
-                                    <div class="mb-4">
-                                        <p>{{ block.fact }}</p>
-                                    </div>
-                                </template>
-                            </div>
+                            <ul v-if="hasFacts">
+                                <li
+                                    v-for="(factItem, index) in factList"
+                                    :key="`factItem-${index}`"
+                                    class="mb-4"
+                                >
+                                    <b class="mr-2">Fact #{{ index + 1 }}</b>
+                                    {{ factItem.fact }}
+                                </li>
+                            </ul>
 
                             <div v-else>
                                 <p>

@@ -21,20 +21,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/catfacts', function (Request $request) {
-    return response()->json([
-        'data' => 'A Random Fact'
-    ]);
-});
-
 
 Route::get('/cats/{limit}', function ($factLimt) {
 
-    $catFactData = new CatController();
-    $randomCats = $catFactData->json($factLimt);
+    $catService = new CatController();
+    $catFactData = $catService->json($factLimt);
+
+
+    // need error handling here, make sure its in limit, if error / unable to reach return error message.
 
     return response()->json([
-        'data' => $randomCats,
+        'data' => $catFactData,
         'limit' => $factLimt
     ]);
 });
