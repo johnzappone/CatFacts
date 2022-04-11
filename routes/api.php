@@ -23,15 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/cats/{limit}', function ($factLimt) {
-
     $catService = new CatController();
-    $catFactData = $catService->json($factLimt);
-
-
-    // need error handling here, make sure its in limit, if error / unable to reach return error message.
-
-    return response()->json([
-        'data' => $catFactData,
-        'limit' => $factLimt
-    ]);
+    return $catService->json($factLimt);
+    //return  CatController::json($factLimt); could make it static
 });

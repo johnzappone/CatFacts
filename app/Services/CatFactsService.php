@@ -7,21 +7,7 @@ use Illuminate\Support\Facades\Http;
 class CatFactsService
 {
 
-    protected $endpoint = "https://catfact.ninja";
-
-    /*
-    public function getRandomCatFact($limit)
-    {
-        $httpClient = new \GuzzleHttp\Client();
-        $request =
-            $httpClient
-            ->get("https://catfact.ninja/facts?max_length=1000&limit=${limit}");
-
-        $response = json_decode($request->getBody()->getContents());
-
-        return $response->{'data'};
-    }
-    */
+    private $endpoint = "https://catfact.ninja";
 
     // this needs to convert to a model, laravel resource instead of returning array dump.
     // model for facts, when getting the json from api, build each to a model to make sure data is valid with proper keys
